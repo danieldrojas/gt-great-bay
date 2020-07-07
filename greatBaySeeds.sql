@@ -5,7 +5,7 @@ CREATE DATABASE greatBayDB;
 USE greatBayDB;
 
 CREATE TABLE items (
-    id NOT NULL AUTO_INCREMENT,
+    id INT NOT NULL AUTO_INCREMENT,
     itemName VARCHAR(30),
     currentBid INT,
     PRIMARY KEY(id)
