@@ -11,7 +11,7 @@ const connection = mysql.createConnection({
   user: "root",
 
   // Your password
-  password: "Maverick1963!",
+  password: "Maverick1963!", // Change based on your local machine
   database: "greatBayDB",
 });
 
@@ -23,17 +23,53 @@ const connection = mysql.createConnection({
 // });
 
 const postItem = () => {
-  connection.connect(err => {
-    if (err) throw err;
-    console.log("connected as id " + connection.threadId + "\n");
-  })
+  inquirer
+    .prompt([
+      {
+        type: "input",
+        message: "What is your item?",
+        name: "item",
+      },
+      {
+        type: "input",
+        message: "What is the starting bid?",
+        name: "startBid",
+      },
+    ])
+    .then((data) => {
+      console.log(data);
+      connection.connect((err) => {
+        if (err) throw err;
+        console.log("connected as id " + connection.threadId + "\n");
+        createItem(data);
+      });
+    });
 };
 
 const bidOnItem = () => {
-  connection.connect(err => {
+  connection.connect((err) => {
     if (err) throw err;
     console.log("connected as id " + connection.threadId + "\n");
-  })
+    
+  });
+};
+
+const createItem = (data) => {
+  const { item, startBid } = data;
+  console.log("Inserting a new product...\n");
+  var query = connection.query(
+    "INSERT INTO items SET ?",
+    {
+      itemName: item,
+      currentBid: startBid,
+    },
+    function (err, res) {
+      if (err) throw err;
+      console.log(res.affectedRows + " item created!\n");
+    }
+  );
+
+  connection.end();
 };
 
 inquirer
@@ -56,7 +92,7 @@ inquirer
         bidOnItem();
         break;
       default:
-          console.log("Bye");
-          return process.exit(0);
+        console.log("Bye");
+        return process.exit(0);
     }
   });

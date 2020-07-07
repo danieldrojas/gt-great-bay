@@ -9,4 +9,4 @@ CREATE TABLE items (
     itemName VARCHAR(30),
     currentBid INT,
     PRIMARY KEY(id)
-);
+);t
